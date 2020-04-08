@@ -133,7 +133,7 @@ Também pode ser renderizado no servidor, usando Node, e ser usado para criar ap
 
 Todo framework/biblioteca JavaScript focado na criação de SPAs, possui alguma padronização para criação de componentes reutilizaveis ao longo de sua aplicação. Um botão que aparece em várias telas, uma caixa de texto, uma janela que se repetem em alguns momentos, listas, seletores, tudo que possa ser reutilizável deve ser concebido como um componente.
 
-Em React temos dois tipos concretos de componentes: **(sub)class based component** e **functional components**.
+Em React temos dois tipos concretos de componentes: **(sub)class based component** e **functional components _(com ou sem hooks)_**.
 
 --
 
@@ -201,7 +201,7 @@ class Contador extends React.Component {
 
 ## Components em React
 
-### Functional Components
+### Functional Components _(sem estado)_
 
 Em React, componentes de função são os mais simples de serem escritos, contém apenas um método render e não possuem seu próprio state _(estado)_.
 
@@ -216,17 +216,42 @@ ReactDOM.render(<HelloMessage name="Wesley" />, appContainer);
 
 ---
 
+## Components em React
+
+### Functional Components _(com estado + hooks)_
+
+Com o lançamento da versão **v16.8** do React, components funcionais agora também podem ter seu controle de estado independente, sem a necessidade do uso de classes.
+
+Esta é inclusive a maneira indicada para se trabalhar com React nos dias de hoje.
+
+```jsx
+function Contador() {
+    const [count, setCount] = React.useState(1);
+    const incrementarCount = () => setCount(count + 1);
+
+    return (
+        <div className="meu-contador">
+            <h2>
+                Contagem <em>{count}</em>
+            </h2>
+            <button type="button" onClick={() => incrementarCount()}>
+                Incrementar
+            </button>
+        </div>
+    );
+}
+
+const appContainer = document.getElementById("hello-example");
+ReactDOM.render(<Contador />, appContainer);
+```
+
+---
+
 ## Iniciando com React
 
 O React possui uma ferramenta oficial para iniciar um projeto 100% baseado no React chamada **Create React App**.
 
 --
-
-Para instalar de forma universal em sua máquina utilize o comando em seu Terminal/Prompt:
-
-```bash
-npm install -g create-react-app
-```
 
 Utilizando esta ferramente poderemos agilizar as configurações iniciais de projeto, não será necessário configurar o **Webpack** ou **Babel.js** porque o `create-react-app` já fará isso por nós.
 
@@ -241,7 +266,7 @@ _PS.: Daqui em diante é altamente recomendado que você tenha Node.js e NPM dev
 Para criar seu primeiro projeto usando o `create-react-app` basta rodar o comando abaixo:
 
 ```bash
-create-react-app meu-projeto
+npx create-react-app nome-do-meu-projeto
 ```
 
 --
