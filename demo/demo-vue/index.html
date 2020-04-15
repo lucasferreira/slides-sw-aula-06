@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+    <style type="text/css">
+      header {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 16px;
+      }
+
+      main {
+        padding: 0 12px 21px;
+      }
+
+      .riscado {
+        text-decoration: line-through;
+        font-style: italic;
+        color: #999;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <img src="https://web.satc.edu.br/wp-content/uploads/2019/04/cropped-logoasatc.png" alt="SATC" />
+      </header>
+      <main>
+        <div class="lista-compras">
+          <ul>
+            <li v-if="lista.length === 0">Nenhum item adicionado na sua lista de compras</li>
+            <li v-for="item in lista" v-bind:class="{ 'riscado': !!item.riscado }" v-on:click="riscaItem($event, item)">
+              <strong>{{ item.nome }}</strong> - {{ item.qtd }}
+            </li>
+          </ul>
+          <form
+            v-on:submit="adicionaItem"
+            action=""
+            method="post"
+            style="border-top: 1px solid #ccc; margin-top: 26px; padding-top: 16px;"
+          >
+            <fieldset style="max-width: 320px;">
+              <h3 style="margin-bottom: 21px;">Novo Item</h3>
+              <div class="form-group">
+                <label htmlFor="nome">Descrição do Item</label>
+                <input type="text" class="form-control" name="item" v-model="nome" />
+              </div>
+              <div class="form-group">
+                <label htmlFor="qtd">Qtd.</label>
+                <input type="number" class="form-control" name="qtd" v-model="qtd" />
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus"></span>
+                Adicionar
+              </button>
+            </fieldset>
+          </form>
+        </div>
+      </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        data: {
+          lista: [],
+          nome: "",
+          qtd: 1,
+        },
+        methods: {
+          adicionaItem: function (event) {
+            event.preventDefault();
+
+            let novoItem = true;
+            if (this.lista.length > 0) {
+              this.lista = this.lista.map(item => {
+                if (item.nome.toLowerCase() === this.nome.toLowerCase()) {
+                  if (item.riscado) {
+                    item.qtd = +this.qtd;
+                    item.riscado = false;
+                  } else {
+                    item.qtd = Number(item.qtd) + Number(this.qtd);
+                  }
+                  novoItem = false;
+                }
+                return item;
+              });
+            }
+
+            if (novoItem) {
+              this.lista.push({ nome: this.nome, qtd: this.qtd, riscado: false });
+            }
+
+            this.nome = "";
+            this.qtd = 1;
+          },
+          riscaItem: function (event, item) {
+            event.preventDefault();
+
+            this.lista = this.lista.map(currentItem => {
+              if (item.nome === currentItem.nome && +item.qtd === +currentItem.qtd) {
+                currentItem.riscado = !currentItem.riscado;
+              }
+              return currentItem;
+            });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

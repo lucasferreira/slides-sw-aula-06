@@ -1,0 +1,22 @@
+<form
+  #f="ngForm"
+  (ngSubmit)="adicionaItem()"
+  method="post"
+  style="border-top: 1px solid #ccc; margin-top: 26px; padding-top: 16px;"
+>
+  <fieldset style="max-width: 320px;">
+    <h3 style="margin-bottom: 21px;">Novo Item</h3>
+    <div class="form-group">
+      <label htmlFor="nome">Descrição do Item</label>
+      <input type="text" class="form-control" name="item" [(ngModel)]="nome" />
+    </div>
+    <div class="form-group">
+      <label htmlFor="qtd">Qtd.</label>
+      <input type="number" class="form-control" name="qtd" [(ngModel)]="qtd" />
+    </div>
+    <button type="submit" class="btn btn-primary">
+      <span class="glyphicon glyphicon-plus"></span>
+      Adicionar
+    </button>
+  </fieldset>
+</form>

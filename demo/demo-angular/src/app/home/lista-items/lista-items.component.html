@@ -1,0 +1,6 @@
+<ul>
+  <li *ngIf="lista.length === 0">Nenhum item adicionado na sua lista de compras</li>
+  <li *ngFor="let item of lista" (click)="riscaItem(item)" [ngClass]="{ riscado: item.riscado }">
+    <strong>{{ item.nome }}</strong> - {{ item.qtd }}
+  </li>
+</ul>

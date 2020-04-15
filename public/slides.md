@@ -551,21 +551,15 @@ Sem o uso do `ngModel` teríamos que fazer isso daqui em todos os campos:
 Antes de começar a usar `ngModel` será necessário importar o módulo `FormsModule` e adicioná-lo a uma lista de módulos da aplicação com a diretiva _NgModule_:
 
 ```ts
-import { NgModule, Component } from "@angular/core"; // <-- NgModule
+import { NgModule } from "@angular/core"; // <-- NgModule
 import { FormsModule } from "@angular/forms"; // <-- FormsModule
 
-@Component({
-    selector: "my-app",
-    templateUrl: "./app.component.html",
-    styleUrls: ["./app.component.css"],
-})
+...
 @NgModule({
     // array com módulos "dependentes" para funcionamento da aplicação/component
     imports: [FormsModule],
 })
-export class AppComponent {
-    // código de sua aplicação/component...
-}
+export class AppModule {}
 ```
 
 ---

@@ -1,0 +1,4 @@
+<div class="lista-compras">
+  <lista-items [lista]="lista" (riscaItem)="riscaItem($event)"></lista-items>
+  <form-cadastro-item (adicionaItem)="adicionaItem($event[0], $event[1])"></form-cadastro-item>
+</div>
