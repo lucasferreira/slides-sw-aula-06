@@ -1,13 +1,5 @@
-header {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 16px;
+.App {
 }
-
-main {
-  padding: 0 12px 21px;
-}
-
 .riscado {
   text-decoration: line-through;
   font-style: italic;

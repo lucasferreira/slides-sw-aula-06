@@ -1,50 +1,63 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+
 import "./App.css";
 
-function salvaItensMemoria(lista) {
-  localStorage.setItem("listaCompras", JSON.stringify(lista));
+function salvarLista(lista) {
+  localStorage.setItem("lista", JSON.stringify(lista));
 }
 
-function recuperaItensMemoria(base = []) {
-  const lista = localStorage.getItem("listaCompras");
-  if (lista === null) {
-    return base;
+function recuperarLista() {
+  const lista = localStorage.getItem("lista");
+  if (lista !== null) {
+    return JSON.parse(lista);
   }
 
-  return JSON.parse(lista);
+  return [];
 }
 
-function FormCadastroItem({ adicionaItem }) {
+function FormNovoItem({ adicionaItem }) {
   const [nome, setNome] = useState("");
   const [qtd, setQtd] = useState(1);
 
   return (
     <form
+      onSubmit={event => {
+        event.preventDefault();
+        adicionaItem(nome, qtd);
+
+        setNome("");
+        setQtd(1);
+      }}
       action=""
       method="post"
       style={{
         borderTop: "1px solid #ccc",
-        marginTop: 26,
-        paddingTop: 16,
+        marginTop: "26px",
+        paddingTop: "16px",
       }}>
-      <fieldset style={{ maxWidth: 320 }}>
-        <h3 style={{ marginBottom: 21 }}>Novo Item</h3>
+      <fieldset style={{ maxWidth: "320px" }}>
+        <h3 style={{ marginBottom: "21px" }}>Novo Item</h3>
         <div className="form-group">
           <label htmlFor="item">Descrição do Item</label>
-          <input type="text" className="form-control" value={nome} onChange={event => setNome(event.target.value)} />
+          <input
+            type="text"
+            className="form-control"
+            id="item"
+            value={nome}
+            onChange={event => setNome(event.target.value)}
+          />
         </div>
         <div className="form-group">
           <label htmlFor="qtd">Qtd.</label>
-          <input type="number" className="form-control" value={qtd} onChange={event => setQtd(event.target.value)} />
+          <input
+            type="number"
+            className="form-control"
+            id="qtd"
+            value={qtd}
+            onChange={event => setQtd(event.target.value)}
+          />
         </div>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => {
-            adicionaItem(nome, qtd);
-            setNome("");
-            setQtd(1);
-          }}>
+        <button type="submit" className="btn btn-primary">
           <span className="glyphicon glyphicon-plus"></span>
           Adicionar
         </button>
@@ -53,90 +66,71 @@ function FormCadastroItem({ adicionaItem }) {
   );
 }
 
-function ListaItems({ riscaItem, lista, fraseVazio }) {
+function ListaItems({ lista = [], comprarItem, removerItem }) {
   return (
     <ul>
       {lista.length === 0 ? (
-        <li className="empty">{fraseVazio}</li>
+        <li className="empty">Nenhum item adicionado</li>
       ) : (
-        lista.map(item => {
-          return (
-            <li
-              key={`${item.nome}:${item.qtd}`}
-              onClick={() => riscaItem(item)}
-              className={item.riscado ? "riscado" : ""}>
-              <strong>{item.nome}</strong> - {item.qtd}
-            </li>
-          );
-        })
+        lista.map((item, index) => (
+          <li className={item.comprado ? "riscado" : ""} key={item.nome}>
+            <strong>{item.nome}</strong> - {item.qtd}
+            <button
+              onClick={event => {
+                event.preventDefault();
+                comprarItem(index);
+              }}>
+              Comprar
+            </button>
+            <button
+              onClick={event => {
+                event.preventDefault();
+                removerItem(index);
+              }}>
+              X
+            </button>
+          </li>
+        ))
       )}
     </ul>
   );
 }
 
-function ListaCompras() {
-  const [lista, setLista] = useState(recuperaItensMemoria([]));
-
-  const adicionaItem = (nome, qtd = 1) => {
-    let novoItem = true;
-
-    if (lista.length > 0) {
-      setLista(
-        lista.map(item => {
-          if (item.nome.toLowerCase() === nome.toLowerCase()) {
-            if (item.riscado) {
-              item.qtd = +qtd;
-              item.riscado = false;
-            } else {
-              item.qtd = Number(item.qtd) + Number(qtd);
-            }
-            novoItem = false;
-          }
-          return item;
-        })
-      );
-    }
-
-    if (novoItem) {
-      setLista([...lista, { nome, qtd, riscado: false }]);
-    }
-  };
-
-  const riscaItem = item => {
-    setLista(
-      lista.map(currentItem => {
-        if (item.nome === currentItem.nome && +item.qtd === +currentItem.qtd) {
-          currentItem.riscado = !currentItem.riscado;
-        }
-        return currentItem;
-      })
-    );
-  };
-
-  useEffect(() => salvaItensMemoria(lista), [lista]);
-
-  return (
-    <div className="lista-compras">
-      <ListaItems riscaItem={riscaItem} lista={lista} fraseVazio="Nenhum item adicionado na sua lista de compras" />
-      <FormCadastroItem adicionaItem={adicionaItem} />
-      <br />
-      <pre>{JSON.stringify(lista, null, 2)}</pre>
-    </div>
-  );
-}
-
 function App() {
+  const [lista, setLista] = useState(recuperarLista());
+
+  useEffect(() => {
+    salvarLista(lista);
+  }, [lista]);
+
+  function adicionaItem(nome, qtd = 1) {
+    setLista([...lista, { nome, qtd, comprado: false }]);
+  }
+
+  function comprarItem(index) {
+    const novaListaAtualizada = lista.map((item, indexAtual) => {
+      if (indexAtual === index) {
+        item.comprado = item.comprado ? false : true;
+      }
+      return item;
+    });
+    setLista(novaListaAtualizada);
+  }
+
+  function removerItem(index) {
+    const novaListaSemItem = lista.filter((item, indexAtual) => index !== indexAtual);
+    setLista(novaListaSemItem);
+  }
+
   return (
     <div className="App">
-      <header>
-        <img
-          src="https://lh3.googleusercontent.com/proxy/u-FbJcOCapNDVcyR9Ez5-g-siDsvkPrVbn7B0baVrLLREkm9g1y6PJTOwLPzJ3BMFGBqqUlcg0Hwk92wf-XX7RHGoCnMBLFSDULYqtDe"
-          alt="SATC"
-        />
-      </header>
-      <main>
-        <ListaCompras />
-      </main>
+      <div className="container">
+        <h1>Compras no Mercado</h1>
+        <br />
+
+        <ListaItems lista={lista} comprarItem={comprarItem} removerItem={removerItem} />
+        <FormNovoItem adicionaItem={adicionaItem} />
+      </div>
     </div>
   );
 }
