@@ -536,7 +536,7 @@ A ligação de dados bidirecional (Two-way data binding) com a diretiva `ngModel
 
 --
 
-Sem o uso do `ngModel` teríamos que fazer isso daqui em todos os campos:
+Sem o uso do `ngModel` teríamos que fazer isso daqui em todos os campos _(parecido com React)_:
 
 ```html
 <input [value]="name" (input)="name=$event.target.value" />
