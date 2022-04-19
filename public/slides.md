@@ -253,7 +253,7 @@ O React possui uma ferramenta oficial para iniciar um projeto 100% baseado no Re
 
 --
 
-Utilizando esta ferramente poderemos agilizar as configurações iniciais de projeto, não será necessário configurar o **Webpack** ou **Babel.js** porque o `create-react-app` já fará isso por nós.
+Utilizando esta ferramenta poderemos agilizar as configurações iniciais de projeto, não será necessário configurar o **Webpack** ou **Babel.js** porque o `create-react-app` já fará isso por nós.
 
 --
 
