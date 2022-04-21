@@ -311,12 +311,11 @@ Por sorte e também por tempo amadurecimento do mercado temos diversas ferramend
 
 --
 
-| Pacote       | Descrição                                                     |
-| ------------ | ------------------------------------------------------------- |
-| react-router | Biblioteca declarativa de roteamento para React               |
-| mobx-react   | Biblioteca para controle de estado global, avançado e reativo |
-| react-redux  | Biblioteca para controle de estado global e avançado          |
-| axios        | Cliente HTTP amplemente usado em requisições AJAX             |
+| Pacote       | Descrição                                         |
+| ------------ | ------------------------------------------------- |
+| react-router | Biblioteca declarativa de roteamento para React   |
+| jotai        | Gerenciamento de estado avançado em React         |
+| axios        | Cliente HTTP amplemente usado em requisições AJAX |
 
 ---
 
